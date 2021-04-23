@@ -1,0 +1,25 @@
+...
+[    5.053161] omap_uart 4806e000.serial: No GPIO consumer rts found
+[    5.060150] 4806e000.serial: ttyO3 at MMIO 0x4806e000 (irq = 127, base_baud = 3000000) is a OMAP UART3
+[    5.076141] panel-simple display: GPIO lookup for consumer hpd
+[    5.082397] panel-simple display: using device tree for GPIO lookup
+[    5.089080] of_get_named_gpiod_flags: can't parse 'hpd-gpios' property of node '/display[0]'
+[    5.098052] of_get_named_gpiod_flags: can't parse 'hpd-gpio' property of node '/display[0]'
+[    5.106842] panel-simple display: using lookup tables for GPIO lookup
+[    5.113708] panel-simple display: No GPIO consumer hpd found
+[    5.119720] panel-simple display: Looking up power-supply from device tree
+[    5.127014] panel-simple display: Looking up power-supply property in node /display failed
+[    5.135772] panel-simple display: supply power not found, using dummy regulator
+[    5.144226] panel-simple display: GPIO lookup for consumer enable
+[    5.150726] panel-simple display: using device tree for GPIO lookup
+[    5.157348] of_get_named_gpiod_flags: can't parse 'enable-gpios' property of node '/display[0]'
+[    5.166595] of_get_named_gpiod_flags: can't parse 'enable-gpio' property of node '/display[0]'
+[    5.175750] panel-simple display: using lookup tables for GPIO lookup
+[    5.182586] panel-simple display: No GPIO consumer enable found
+[    5.188964] panel-simple display: Specify missing connector_type
+[    5.231506] brd: module loaded
+[    5.271972] loop: module loaded
+[    5.280853] mtdoops: mtd device (mtddev=name/number) must be supplied
+[    5.302764] mdio_bus fixed-0: GPIO lookup for consumer reset
+...
+No other relevant drm/dss/etc logs
