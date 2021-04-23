@@ -1,0 +1,46 @@
+--- drivers/gpu/drm/panel/panel-simple.c	2021-04-23 17:55:20.078111764 -0400
++++ drivers/gpu/drm/panel/panel-simple.c	2021-04-23 17:51:58.129039006 -0400
+@@ -2068,6 +2068,33 @@
+ 	},
+ };
+ 
++static const struct drm_display_mode hydis_hv070ws1_105_mode = {
++	/* 1024x600p */
++	.clock = 51200,
++	
++	.hdisplay = 1024,
++	.hsync_start = 1024 + 160, //hactive + hfp
++	.hsync_end = 1024 + 160 + 10, //hactive + hfp + hsw
++	.htotal = 1024 + 160 + 10 + 150, //hactive + hfp + hsw + hbp
++
++	.vdisplay = 600, 
++	.vsync_start = 600 + 12, // vactive + vfp
++	.vsync_end = 600 + 12 + 3, // vactive + vfp + vsw
++	.vtotal = 600 + 12 + 3 + 20, // vactive + vfp + vsw + vbp
++};
++
++static const struct panel_desc hydis_hv070ws1_105 = {
++	.modes = &hydis_hv070ws1_105_mode,
++	.num_modes = 1,
++	.bpc = 8,
++	.size = {
++		.width = 154,
++		.height = 90,
++	},
++	.connector_type = DRM_MODE_CONNECTOR_DPI,
++	.bus_format = MEDIA_BUS_FMT_RBG888_1X24,
++};
++
+ static const struct drm_display_mode innolux_at043tn24_mode = {
+ 	.clock = 9000,
+ 	.hdisplay = 480,
+@@ -4073,6 +4100,9 @@
+ 		.compatible = "hit,tx23d38vm0caa",
+ 		.data = &hitachi_tx23d38vm0caa
+ 	}, {
++		.compatible = "hydis,hv070ws1-105",
++		.data = &hydis_hv070ws1_105,
++	},{
+ 		.compatible = "innolux,at043tn24",
+ 		.data = &innolux_at043tn24,
+ 	}, {
