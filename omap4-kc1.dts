@@ -40,11 +40,6 @@ panel-dpi.c::panel_dpi_probe_pdata() ==> dss-of.c::omapdss_of_find_source_for_fi
 		#address-cells = <1>;
 		#size-cells = <1>;
 		ranges;
-
-		// framebuffer_region@9fec4000 {
-		// 	no-map;
-		// 	reg = <0x9fec4000 (1024 * 600 * 4)>;
-		// };
 	};
 
 	chosen {
@@ -53,16 +48,6 @@ panel-dpi.c::panel_dpi_probe_pdata() ==> dss-of.c::omapdss_of_find_source_for_fi
 		ranges;
 
 		stdout-path = "serial2";
-
-		// framebuffer0@9fec4000 {
-		// 	compatible = "simple-framebuffer";
-		// 	reg = <0x9fec4000 (1024 * 600 * 4)>;
-		// 	width = <1024>;
-		// 	height = <600>;
-		// 	stride = <(1024 * 4)>;
-		// 	format = "r5g6b5";
-		// 	status = "okay";
-		// };
 	};
 
 	panel {
