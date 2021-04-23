@@ -20,31 +20,25 @@ panel-dpi.c::panel_dpi_probe_pdata() ==> dss-of.c::omapdss_of_find_source_for_fi
 		reg = <0x80000000 0x20000000>; /* 512 MB */
 	};
 
-	pwmleds {
+	led-controller {
 		compatible = "pwm-leds";
 
-		green {
+		led-1 {
 			label = "green";
 			pwms = <&twl_pwm 0 7812500>;
 			max-brightness = <127>;
 		};
 
-		orange {
+		led-2 {
 			label = "orange";
 			pwms = <&twl_pwm 1 7812500>;
 			max-brightness = <127>;
 		};
 	};
 
-	reserved-memory {
-		#address-cells = <1>;
-		#size-cells = <1>;
-		ranges;
-
-		// framebuffer_region@9fec4000 {
-		// 	no-map;
-		// 	reg = <0x9fec4000 (1024 * 600 * 4)>;
-		// };
+	bat: battery {
+		compatible = "simple-battery";
+		/* Documentation/devicetree/bindings/power/supply/battery.yaml */
 	};
 
 	chosen {
@@ -102,7 +96,7 @@ panel-dpi.c::panel_dpi_probe_pdata() ==> dss-of.c::omapdss_of_find_source_for_fi
 	/* LCD Regulator 3v3 */
 	lcd2_power: lcd2_power_reg {
 		compatible = "regulator-fixed";
-		regulator-name = "hsusb1_vbus";
+		regulator-name = "lcd2_power_reg";
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
 		gpio = <&gpio2 15 GPIO_ACTIVE_HIGH>; /* gpio_47 4v4 LCD_EN */
@@ -119,6 +113,7 @@ panel-dpi.c::panel_dpi_probe_pdata() ==> dss-of.c::omapdss_of_find_source_for_fi
 	pinctrl-names = "default";
 	pinctrl-0 = <&dss_dpi_pins>;
 	connector_type = <17>; //drm_mode.c , DRM_MODE_CONNECTOR_DPI
+	connector-type = <17>; //drm_mode.c , DRM_MODE_CONNECTOR_DPI
 	
 	dispc@0  {
 		status = "ok";
@@ -129,9 +124,12 @@ panel-dpi.c::panel_dpi_probe_pdata() ==> dss-of.c::omapdss_of_find_source_for_fi
 		#size-cells = <0>;
 		port@0 {
 			data-lines = <24>;
+			//appa
 			connector_type = <17>; //drm_mode.c , DRM_MODE_CONNECTOR_DPI
+			connector-type = <17>; //drm_mode.c , DRM_MODE_CONNECTOR_DPI
 			dpi_out_0: endpoint {
 				connector_type = <17>; //drm_mode.c , DRM_MODE_CONNECTOR_DPI
+				connector-type = <17>; //drm_mode.c , DRM_MODE_CONNECTOR_DPI
 				data-lines = <24>;
 				remote-endpoint = <&panel_dpi_in>;
 			};
@@ -144,7 +142,8 @@ panel-dpi.c::panel_dpi_probe_pdata() ==> dss-of.c::omapdss_of_find_source_for_fi
 };
 
 &dsi2 {
-	status = "disabled";
+	status = "okay";
+	vdd-supply = <&vcxio>;
 };
 
 &omap4_pmx_core {
@@ -187,19 +186,19 @@ panel-dpi.c::panel_dpi_probe_pdata() ==> dss-of.c::omapdss_of_find_source_for_fi
 
 	// lcd_en_pin: pinmux_lcd_en_pin{
 	// 	pinctrl-single,pins = <
-	// 		OMAP4_IOPAD(0x1B, PIN_OUTPUT | MUX_MODE_5) /* LCD_PWR_ON */
+	// 		OMAP4_IOPAD(???, PIN_OUTPUT | MUX_MODE_5) /* LCD_PWR_ON */
 	// 	>;
 	// };
 
 	// lcd_rgb_shutdown: pinmux_lcd_rgb_shutdown{
 	// 	pinctrl-single,pins = <
-	// 		OMAP4_IOPAD() /* OMAP_RGB_SHTDOWN */
+	// 		OMAP4_IOPAD(???) /* OMAP_RGB_SHTDOWN */
 	// 	>;
 	// };
 
 	// lcd_pwr: pinmux_lcd_pwr{
 	// 	pinctrl-single,pins = <
-	// 		OMAP4_IOPAD() /* GPIO_47 3.3v rail*/
+	// 		OMAP4_IOPAD(???) /* GPIO_47 3.3v rail*/
 	// 	>;
 	// };
 
@@ -276,6 +275,13 @@ panel-dpi.c::panel_dpi_probe_pdata() ==> dss-of.c::omapdss_of_find_source_for_fi
 
 	clock-frequency = <400000>;
 
+	ti,bq27541@55 {
+		compatible = "ti,bq27541";
+		reg = <0x55>;
+		monitored-battery = <&bat>;
+		/* Documentation/devicetree/bindings/power/supply/bq27xxx.yaml */
+	};
+
 	twl: twl@48 {
 		reg = <0x48>;
 		/* IRQ# = 7 */
@@ -307,6 +313,12 @@ panel-dpi.c::panel_dpi_probe_pdata() ==> dss-of.c::omapdss_of_find_source_for_fi
 	pinctrl-0 = <&i2c4_pins>;
 
 	clock-frequency = <400000>;
+
+	tmp@48 {
+		compatible = "ti,tmp105";
+		reg = <0x48>;
+		status = "okay";
+	};
 };
 
 &mmc1 {
