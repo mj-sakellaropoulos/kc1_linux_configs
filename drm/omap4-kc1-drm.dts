@@ -4,11 +4,6 @@
  */
 /dts-v1/;
 
-/* For omapfb driver
-[    5.086059] panel-dpi panel: failed to find video source
-panel-dpi.c::panel_dpi_probe_pdata() ==> dss-of.c::omapdss_of_find_source_for_first_ep()
-*/
-
 #include "omap443x.dtsi"
 
 / {
