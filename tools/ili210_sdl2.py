@@ -2,7 +2,7 @@
 # (c) 2021 , Michael John Sakellaropoulos
 
 # Prerequisites : smbus2, pysdl2, sdl2(system library)
-# Read touch coords from KC1 ilitek ili210x touch controller and draw as SDL2 Rects
+# Read touch coords from KC1 ilitek ili210x touch controller and draw as SDL2 Rect
 
 import sys
 import sdl2
@@ -90,22 +90,22 @@ def ili210x_touchdata_to_coords(touchdata, finger):
     return (x, y)
 
 
-def draw_rect(renderer, x, y):
+def draw_rect(renderer, x, y, color):
     width = 5
     height = 5
     x1 = int(x-width/2)
     y1 = int(y-height/2)
-    renderer.fill(rects=[[x1, y1, width, height]], color=sdl2.ext.Color(255,255,255,0))
-    #print(f'draw_rect {x1} {y1} {width} {height}')
+    renderer.fill(rects=[[x1, y1, width, height]], color=color)
+    # print(f'draw_rect {x1} {y1} {width} {height}')
 
 
-def draw_touch(bus, renderer, max_x, max_y, x_res, y_res):
-    touchdata = ili210x_read_touch_data(bus)
-    (x, y) = ili210x_touchdata_to_coords(touchdata, 0)
+def draw_touch(touchdata, finger, renderer, max_x, max_y, x_res, y_res):
+    (x, y) = ili210x_touchdata_to_coords(touchdata, finger)
     x = x*x_res/max_x
     y = y*y_res/max_y
-    draw_rect(renderer, x, y)
-    #print(f'draw_touch: X: {x} , Y: {y}')
+    color = sdl2.ext.Color(0, 0, 255, 0) if finger == 0 else sdl2.ext.Color(0, 255, 0, 0)
+    draw_rect(renderer, x, y, color)
+    # print(f'draw_touch: X: {x} , Y: {y}')
 
 
 def main():
@@ -133,7 +133,9 @@ def main():
                 break
             # elif event.type == sdl2.SDL_MOUSEMOTION:
                 # motion = event.motion
-        draw_touch(i2c, renderer, panel.max_x, panel.max_y, X_RES, Y_RES)
+        touchdata = ili210x_read_touch_data(i2c)
+        draw_touch(touchdata, 0, renderer, panel.max_x, panel.max_y, X_RES, Y_RES)
+        draw_touch(touchdata, 1, renderer, panel.max_x, panel.max_y, X_RES, Y_RES)
         renderer.present()
 
     print("Closing!")
